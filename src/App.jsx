@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { GRID, plantilla, attrPieza } from './settings'
@@ -19,22 +19,18 @@ function App()
       updateFondo[y + offSetY][x + offSetX] = 5
       setFondo(updateFondo)
     }
-
-    /* plantilla.z[0].forEach(segm =>
-      {
-        const {x, y} = attrPieza;
-        const updateFondo = [...fondo]
-        console.log(segm, y, x)
-        updateFondo[y + segm[1]][x + segm[0]] = 5
-        setFondo(updateFondo)
-      }); */
   }
+
+  useEffect(() =>
+  {
+    piezaActual()
+  }, [])
 
   // console.log(fondo)
 
   return (
     <>
-      <main className='flex w-screen min-h-screen justify-center items-center bg-neutral-600' onClick={piezaActual}>
+      <main className='flex w-screen min-h-screen justify-center items-center bg-neutral-600'>
         <div className='grid grid-cols-14 grid-rows-19 w-[392px] h-[532px] bg-red-500 border-slate-100 border-solid border'>
           {
             GRID.map((fila, index) =>
