@@ -1,6 +1,6 @@
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import { GRID, plantilla, attrPieza } from './settings'
 
 function App()
@@ -9,14 +9,17 @@ function App()
 
   const piezaActual = () =>
   {
-    for (let i = 0; i < 4; i ++)
+    const {iniX, iniY, rotacion} = attrPieza;
+    const iniRotacion = rotacion * 4
+    const finRotacion = iniRotacion + 4
+
+    for (let i = iniRotacion; i < finRotacion; i ++)
     {
       const offSetX = plantilla.z[i][0]
       const offSetY = plantilla.z[i][1]
 
-      const {x, y} = attrPieza;
       const updateFondo = [...fondo]
-      updateFondo[y + offSetY][x + offSetX] = 5
+      updateFondo[iniY + offSetY][iniX + offSetX] = 5
       setFondo(updateFondo)
     }
   }
@@ -24,6 +27,7 @@ function App()
   useEffect(() =>
   {
     piezaActual()
+    setInterval(() => console.log('1sg'), 1000)
   }, [])
 
   // console.log(fondo)

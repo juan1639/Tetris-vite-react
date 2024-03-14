@@ -55,8 +55,9 @@ const plantilla =
 
 const attrPieza =
 {
-    x: 8,
-    y: 2
+    iniX: 7,
+    iniY: 2,
+    rotacion: 0
 };
 
 export {
