@@ -9,7 +9,7 @@ for (let i = 0; i < FILAS; i ++)
 
     for (let ii = 0; ii < COLUMNAS; ii ++)
     {
-        GRID[i][ii] = 1;
+        GRID[i][ii] = 0; // 0 = fondo (sin rastro)
     }
 }
 console.log(GRID);
@@ -57,11 +57,21 @@ const attrPieza =
 {
     iniX: 7,
     iniY: 2,
+    x: 7,
+    y: 2,
     rotacion: 0
+};
+
+const oldPieza =
+{
+    oldX: 7,
+    oldY: 2,
+    oldRotacion: 0
 };
 
 export {
     GRID,
     plantilla,
-    attrPieza
+    attrPieza,
+    oldPieza
 };
