@@ -1,7 +1,7 @@
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import {useState, useEffect} from 'react'
-import {updatePieza} from './functions/pieza'
+import {updatePieza, updatePiezaRotando} from './functions/pieza'
 import {GRID, attrPieza, oldPieza} from './settings'
 
 function App()
@@ -14,14 +14,6 @@ function App()
   {
     updatePieza(true, fondo, setFondo)
 
-    /* document.addEventListener('keydown', () =>
-    {
-      attrPieza.rotacion ++;
-      if (attrPieza.rotacion >= 4) attrPieza.rotacion = 0
-
-      setRotar(attrPieza.rotacion)
-    }) */
-
     setInterval(() =>
     {
       console.log('5sg')
@@ -30,14 +22,28 @@ function App()
       bajaPieza.y ++
       setPiezaY(bajaPieza.y)
     } , 1000)
+
+    document.addEventListener('keydown', handleRotar)
+
+    return () => document.removeEventListener('keydown', handleRotar)
   }, [])
 
-  useEffect(() =>
-  {
-    updatePieza(false, fondo, setFondo)
-  }, [piezaY, rotar])
+  useEffect(() => updatePiezaRotando(false, fondo, setFondo), [rotar])
+  useEffect(() => updatePieza(false, fondo, setFondo), [piezaY])
 
-  // console.log(fondo)
+  const handleRotar = ({keyCode}) =>
+  {
+    if (keyCode !== 32) return
+
+    console.log('rotar')
+
+    oldPieza.oldRotacion = attrPieza.rotacion
+    attrPieza.rotacion ++;
+    if (attrPieza.rotacion >= 4) attrPieza.rotacion = 0
+    
+    setRotar(attrPieza.rotacion)
+    console.log(attrPieza.rotacion)
+  }
 
   return (
     <>
@@ -51,26 +57,11 @@ function App()
               return (
                 fila.map((columna, i) =>
                 {
+                  const valor = fondo[index][i]
                   const coorX = `col-start-${i}`
-                  let estilo
+                  const estilo = `${coorX} ${coorY} border border-blue-600 border-solid`
 
-                  if (fondo[index][i] === 5)
-                  {
-                    estilo = `${coorX} ${coorY} border border-blue-600 border-solid bg-neutral-800`
-                  }
-                  else
-                  {
-                    estilo = `${coorX} ${coorY} border border-blue-600 border-solid`
-                  }
-
-                  return <Casilla
-                      estilo={estilo}
-                      key={i + index}
-                      fondo={fondo}
-                      setFondo={setFondo}
-                      index={index}
-                      i={i}
-                    >{fondo[index][i]}</Casilla>
+                  return <Casilla estilo={estilo} key={i + index}>{valor}</Casilla>
                 })
               )
             })
@@ -81,16 +72,11 @@ function App()
   )
 }
 
-const Casilla = ({estilo, children, fondo, setFondo, index, i}) =>
+const Casilla = ({estilo, children}) =>
 {
-  const handleClick = () =>
-  {
-    const updateFondo = [...fondo]
-    updateFondo[index][i] = 0
-    setFondo(updateFondo)
-  }
+  if (children === 5) estilo += ' bg-neutral-800'
 
-  return <span className={estilo} onClick={handleClick}>{children}</span>
+  return <span className={estilo}>{children}</span>
 }
 
 export default App
