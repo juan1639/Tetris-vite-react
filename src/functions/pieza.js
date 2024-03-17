@@ -1,15 +1,28 @@
-import { plantilla, attrPieza, oldPieza } from "../settings";
+import {
+  FILAS,
+  COLUMNAS,
+  plantilla,
+  attrPieza,
+  oldPieza,
+  pausas
+} from "../settings";
 
-export const updatePiezaRotando = (init, fondo, setFondo) =>
+export const updatePiezaRotando = (init, fondo, setFondo, setPiezaY) =>
 {
-    borrarDibujar(false, init, fondo, setFondo, true)
-    borrarDibujar(true, init, fondo, setFondo, true)
+  borrarDibujar(false, init, fondo, setFondo, true)
+  borrarDibujar(true, init, fondo, setFondo, true)
 }
 
-export const updatePieza = (init, fondo, setFondo) =>
+export const updatePieza = (init, fondo, setFondo, setPiezaY) =>
 {
-    borrarDibujar(false, init, fondo, setFondo, false)
-    borrarDibujar(true, init, fondo, setFondo, false)
+  if (checkColisiones(false, fondo))
+  {
+    dejaRastroPiezaYNextPieza(fondo, setFondo, setPiezaY)
+    return
+  }
+  
+  borrarDibujar(false, init, fondo, setFondo, false)
+  borrarDibujar(true, init, fondo, setFondo, false)
 }
 
 const borrarDibujar = (dibujar, init, fondo, setFondo, rotando) =>
@@ -23,19 +36,19 @@ const borrarDibujar = (dibujar, init, fondo, setFondo, rotando) =>
   let iniRotacion = rotaciones[0]
   let finRotacion = rotaciones[1]
 
+  const updateFondo = [...fondo]
+
   for (let i = iniRotacion; i < finRotacion; i ++)
   {
     const offSetX = plantilla.z[i][0]
     const offSetY = plantilla.z[i][1]
 
-    const updateFondo = [...fondo]
-
     const args = setUpdatesFondo(dibujar, rotando, init, iniY, iniX, y, x, oldY, oldX, offSetX, offSetY)
 
     updateFondo[args[0]][args[1]] = args[2] 
-
-    setFondo(updateFondo)
   }
+
+  setFondo(updateFondo)
 }
 
 const setRotaciones = (dibujar, rotacion, oldRotacion, rotando) =>
@@ -95,4 +108,55 @@ const setUpdatesFondo = (dibujar, rotando, init, iniY, iniX, y, x, oldY, oldX, o
       return [oldY + offSetY, oldX + offSetX, 0] // 0 = fondo (sin rastro)
     }
   }
+}
+
+const checkColisiones = (rotando, fondo) =>
+{
+  const {x, y, rotacion} = attrPieza
+
+  if (!rotando)
+  {
+    const iniRotacion = rotacion * 4
+    const finRotacion = rotacion * 4 + 4
+
+    for (let i = iniRotacion; i < finRotacion; i ++)
+    {
+      const offSetX = plantilla.z[i][0]
+      const offSetY = plantilla.z[i][1]
+
+      if (fondo[y + offSetY][x + offSetX] === 1) return true
+
+      if (y + offSetY >= FILAS) return true
+    }
+  }
+}
+
+const dejaRastroPiezaYNextPieza = (fondo, setFondo, setPiezaY) =>
+{
+  const iniRotacion = attrPieza.rotacion * 4
+  const finRotacion = attrPieza.rotacion * 4 + 4
+  
+  const rastroFondo = [...fondo]
+
+  for (let i = iniRotacion; i < finRotacion; i ++)
+  {
+    const offSetX = plantilla.z[i][0]
+    const offSetY = plantilla.z[i][1]
+
+    rastroFondo[oldPieza.oldY + offSetY][attrPieza.x + offSetX] = 7
+  }
+  
+  setFondo(rastroFondo)
+  attrPieza.activa = false
+
+  setTimeout(() =>
+  {
+    attrPieza.activa = true
+    attrPieza.y = attrPieza.iniY
+    attrPieza.x = attrPieza.iniX
+    oldPieza.oldY = attrPieza.iniY
+    oldPieza.oldX = attrPieza.iniX
+    setPiezaY(attrPieza.y)
+  },
+  pausas.entrePiezas)
 }

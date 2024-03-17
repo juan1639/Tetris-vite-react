@@ -2,7 +2,7 @@
 // import viteLogo from '/vite.svg'
 import {useState, useEffect} from 'react'
 import {updatePieza, updatePiezaRotando} from './functions/pieza'
-import {GRID, attrPieza, oldPieza} from './settings'
+import {GRID, attrPieza, oldPieza, dificultad} from './settings'
 
 function App()
 {
@@ -12,24 +12,27 @@ function App()
 
   useEffect(() =>
   {
-    updatePieza(true, fondo, setFondo)
+    updatePieza(true, fondo, setFondo, setPiezaY)
 
     setInterval(() =>
     {
       console.log('5sg')
       const bajaPieza = attrPieza
+      if (!bajaPieza.activa) return
+      
       oldPieza.oldY = bajaPieza.y
       bajaPieza.y ++
       setPiezaY(bajaPieza.y)
-    } , 1000)
+    },
+    dificultad.bajaPieza)
 
     document.addEventListener('keydown', handleRotar)
 
     return () => document.removeEventListener('keydown', handleRotar)
   }, [])
 
-  useEffect(() => updatePiezaRotando(false, fondo, setFondo), [rotar])
-  useEffect(() => updatePieza(false, fondo, setFondo), [piezaY])
+  useEffect(() => updatePiezaRotando(false, fondo, setFondo, setPiezaY), [rotar])
+  useEffect(() => updatePieza(false, fondo, setFondo, setPiezaY), [piezaY])
 
   const handleRotar = ({keyCode}) =>
   {

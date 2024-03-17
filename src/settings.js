@@ -10,6 +10,7 @@ for (let i = 0; i < FILAS; i ++)
     for (let ii = 0; ii < COLUMNAS; ii ++)
     {
         GRID[i][ii] = 0; // 0 = fondo (sin rastro)
+        if (i === 17) GRID[i][ii] = 1
     }
 }
 console.log(GRID);
@@ -59,7 +60,8 @@ const attrPieza =
     iniY: 2,
     x: 7,
     y: 2,
-    rotacion: 0
+    rotacion: 0,
+    activa: true
 };
 
 const oldPieza =
@@ -69,9 +71,23 @@ const oldPieza =
     oldRotacion: 0
 };
 
+const dificultad =
+{
+    bajaPieza: 1000
+};
+
+const pausas =
+{
+    entrePiezas: 1100
+}
+
 export {
+    FILAS,
+    COLUMNAS,
     GRID,
     plantilla,
     attrPieza,
-    oldPieza
+    oldPieza,
+    dificultad,
+    pausas
 };
