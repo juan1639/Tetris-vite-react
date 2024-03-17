@@ -1,7 +1,7 @@
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import {useState, useEffect} from 'react'
-import {updatePieza, updatePiezaRotando} from './functions/pieza'
+import {updatePiezaBajando, updatePiezaRotando} from './functions/pieza'
 import {GRID, attrPieza, oldPieza, dificultad} from './settings'
 
 function App()
@@ -12,7 +12,7 @@ function App()
 
   useEffect(() =>
   {
-    updatePieza(true, fondo, setFondo, setPiezaY)
+    updatePiezaBajando(true, fondo, setFondo, setPiezaY)
 
     setInterval(() =>
     {
@@ -32,7 +32,7 @@ function App()
   }, [])
 
   useEffect(() => updatePiezaRotando(false, fondo, setFondo, setPiezaY), [rotar])
-  useEffect(() => updatePieza(false, fondo, setFondo, setPiezaY), [piezaY])
+  useEffect(() => updatePiezaBajando(false, fondo, setFondo, setPiezaY), [piezaY])
 
   const handleRotar = ({keyCode}) =>
   {

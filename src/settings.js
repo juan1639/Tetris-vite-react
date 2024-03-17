@@ -10,7 +10,7 @@ for (let i = 0; i < FILAS; i ++)
     for (let ii = 0; ii < COLUMNAS; ii ++)
     {
         GRID[i][ii] = 0; // 0 = fondo (sin rastro)
-        if (i === 17) GRID[i][ii] = 1
+        // if (i === 17 || i === 18) GRID[i][ii] = 1
     }
 }
 console.log(GRID);
@@ -54,6 +54,8 @@ const plantilla =
     ],
 };
 
+const piezasStringArray = 'zsljoit'
+
 const attrPieza =
 {
     iniX: 7,
@@ -61,7 +63,8 @@ const attrPieza =
     x: 7,
     y: 2,
     rotacion: 0,
-    activa: true
+    activa: true,
+    id: piezasStringArray.charAt(Math.floor(Math.random()*piezasStringArray.length))
 };
 
 const oldPieza =
@@ -73,7 +76,7 @@ const oldPieza =
 
 const dificultad =
 {
-    bajaPieza: 1000
+    bajaPieza: 500
 };
 
 const pausas =
@@ -86,6 +89,7 @@ export {
     COLUMNAS,
     GRID,
     plantilla,
+    piezasStringArray,
     attrPieza,
     oldPieza,
     dificultad,

@@ -2,6 +2,7 @@ import {
   FILAS,
   COLUMNAS,
   plantilla,
+  piezasStringArray,
   attrPieza,
   oldPieza,
   pausas
@@ -13,7 +14,7 @@ export const updatePiezaRotando = (init, fondo, setFondo, setPiezaY) =>
   borrarDibujar(true, init, fondo, setFondo, true)
 }
 
-export const updatePieza = (init, fondo, setFondo, setPiezaY) =>
+export const updatePiezaBajando = (init, fondo, setFondo, setPiezaY) =>
 {
   if (checkColisiones(false, fondo))
   {
@@ -40,8 +41,8 @@ const borrarDibujar = (dibujar, init, fondo, setFondo, rotando) =>
 
   for (let i = iniRotacion; i < finRotacion; i ++)
   {
-    const offSetX = plantilla.z[i][0]
-    const offSetY = plantilla.z[i][1]
+    const offSetX = plantilla[attrPieza.id][i][0]
+    const offSetY = plantilla[attrPieza.id][i][1]
 
     const args = setUpdatesFondo(dibujar, rotando, init, iniY, iniX, y, x, oldY, oldX, offSetX, offSetY)
 
@@ -121,12 +122,12 @@ const checkColisiones = (rotando, fondo) =>
 
     for (let i = iniRotacion; i < finRotacion; i ++)
     {
-      const offSetX = plantilla.z[i][0]
-      const offSetY = plantilla.z[i][1]
-
-      if (fondo[y + offSetY][x + offSetX] === 1) return true
+      const offSetX = plantilla[attrPieza.id][i][0]
+      const offSetY = plantilla[attrPieza.id][i][1]
 
       if (y + offSetY >= FILAS) return true
+
+      if (fondo[y + offSetY][x + offSetX] === 1) return true
     }
   }
 }
@@ -140,8 +141,8 @@ const dejaRastroPiezaYNextPieza = (fondo, setFondo, setPiezaY) =>
 
   for (let i = iniRotacion; i < finRotacion; i ++)
   {
-    const offSetX = plantilla.z[i][0]
-    const offSetY = plantilla.z[i][1]
+    const offSetX = plantilla[attrPieza.id][i][0]
+    const offSetY = plantilla[attrPieza.id][i][1]
 
     rastroFondo[oldPieza.oldY + offSetY][attrPieza.x + offSetX] = 7
   }
@@ -151,6 +152,7 @@ const dejaRastroPiezaYNextPieza = (fondo, setFondo, setPiezaY) =>
 
   setTimeout(() =>
   {
+    attrPieza.id = piezasStringArray.charAt(Math.floor(Math.random()*piezasStringArray.length))
     attrPieza.activa = true
     attrPieza.y = attrPieza.iniY
     attrPieza.x = attrPieza.iniX
